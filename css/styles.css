@@ -94,18 +94,7 @@ section {
     height: auto;
 }
 
-button.top__button {
-    background-color: rgba(248, 241, 241, 0.068);
-    color: white;
-    cursor: pointer;
-    padding: 10px;
-    margin: 3px;
-    border-radius: 10px;
-    font-size: 16px;
-}
-button.top__button:hover {
-    background-color: rgba(13, 241, 89, 0.5);
-}
+
 
 /* ---- Module Rules ---- */
 

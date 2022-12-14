@@ -19,7 +19,7 @@
 */
 const fragment = document.createDocumentFragment();
 const sectionList = document.querySelectorAll('section');
-const topButtonList = document.querySelectorAll('.top__button');
+
 
 /**
  * End Global Variables
@@ -78,14 +78,7 @@ function scrollToElement(event){
         section.scrollIntoView({behavior: "smooth"});
     }
 }
-// Go Top Button
 
-for (const button of topButtonList) {
-    button.addEventListener('click', () =>
-        // scrollTo with behavior not supported in Safari Browser
-        window.scrollTo({top: 0, behavior: 'smooth'})
-    );
-}
 /**
  * End Main Functions
  * Begin Events
