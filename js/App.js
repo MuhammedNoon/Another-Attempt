@@ -17,28 +17,18 @@
  * Define Global Variables
  * 
 */
-const fragment = document.createDocumentFragment();
-const sectionList = document.querySelectorAll('section');
-
+// navigation global var
+const navBarList = document.getElementById('navbar__list');
+// sections global var
+const sectionContent = document.querySelectorAll('section');
 
 /**
  * End Global Variables
  * Start Helper Functions
  * 
 */
-function createNavItemHTML(id, name){
-    const itemHTML = `<a class ="menu__link" data-id="${id}">${name}</a>`;
-    return itemHTML;
-}
-function isInViewport (elem) {
-    const bounding = elem.getBoundingClientRect();
-    return (
-        bounding.top >= 0 &&
-        bounding.left >= 0 &&
-        bounding.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-        bounding.right <= (window.innerWidth || document.documentElement.clientWidth)
-    );
-};
+
+
 
 /**
  * End Helper Functions
@@ -47,52 +37,91 @@ function isInViewport (elem) {
 */
 
 // build the nav
-function buildNavigation(){
-    for (let i=0; i < sectionList.length; i++){
-        const newMenuItem = document.createElement('li');
-        const sectionName = sectionList[i].getAttribute('data-nav')
-        const sectionId = sectionList[i].getAttribute('id')
-        newMenuItem.innerHTML = createNavItemHTML(sectionId, sectionName)
-         fragment.appendChild(newMenuItem);
-    }
-    const navBarList = document.getElementById('navbar__list')
-    navBarList.appendChild(fragment);
-}
 
+const navBarBarrel = () => {
+
+    let navInterface = '';
+    // looping over all sections
+    sectionContent.forEach(section => {
+
+        const sectionName = section.id;
+        const sectionNav = section.dataset.nav;
+
+        navInterface += `<li><a class="menu__link" href="#${sectionName}">${sectionNav}</a></li>`;
+
+    });
+    // append all elements to the navigation
+    navBarList.innerHTML = navInterface;
+
+
+};
+
+navBarBarrel();
+const scrollToSec = () => {
+
+    const links = document.querySelectorAll('.navbar__menu a');
+    links.forEach(link => {
+        link.addEventListener('click', () => {
+            for(i = 0 ; i<sectionContent ; i++){
+                sectionContent[i].addEventListener("click",sectionScroll(link));
+            }
+        });
+    });
+
+};
+
+scrollToSec();
 // Add class 'active' to section when near top of viewport
-function setActiveClass(){
-    for (let i=0; i < sectionList.length; i++){
-        if (isInViewport(sectionList[i])){
-            sectionList[i].classList.add("your-active-class");
-        }else{
-            sectionList[i].classList.remove("your-active-class");
+
+// getting the largest value that's less or equal to the number
+const secValue = (section) => {
+    return Math.floor(section.getBoundingClientRect().top);
+};
+
+// remove the active class
+const activeOff = (section) => {
+    section.classList.remove('your-active-class');
+    section.style.cssText = "background-color: linear-gradient(0deg, rgba(255,255,255,.1) 0%, rgba(255,255,255,.2) 100%)";
+};
+// adding the active class
+const activeOn = (conditional, section) => {
+    if(conditional){
+        section.classList.add('your-active-class');
+    };
+};
+window.addEventListener('scroll' ,() =>{
+    const scrolledOn = document.querySelectorAll(".menu__link")
+    sectionContent.forEach((section, i)=>{
+        //Get the boundingrect for each section 
+        const sectionLink = section.getBoundingClientRect();
+        //Check if the section is in viewport or not 
+        if (sectionLink.top <= 380 && sectionLink.bottom >= 350){
+            section.classList.add("your-active-class");
+            scrolledOn[i].classList.add("active_button");
+        } else{
+            section.classList.remove("your-active-class");
+            scrolledOn[i].classList.remove("active_button");
         }
-    }
-}
+    })
+
+});
+
+
+
+
 
 // Scroll to anchor ID using scrollTO event
-function scrollToElement(event){
-    if(event.target.nodeName === 'A'){
-        const sectionId = event.target.getAttribute('data-id');
-        const section = document.getElementById(sectionId);
-        section.scrollIntoView({behavior: "smooth"});
-    }
-}
+
+
 
 /**
  * End Main Functions
  * Begin Events
  * 
 */
-document.addEventListener('scroll', function(){
-    setActiveClass();
-});
-const navBarList = document.getElementById('navbar__list')
-navBarList.addEventListener('click', function(event){
-    scrollToElement(event)
-})
+
 // Build menu 
-buildNavigation()
+
 // Scroll to section on link click
 
 // Set sections as active
